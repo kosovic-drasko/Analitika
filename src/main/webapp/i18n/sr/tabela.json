@@ -1,0 +1,25 @@
+{
+  "analitikaApp": {
+    "tabela": {
+      "home": {
+        "title": "Tabelas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Kreiraj novi Tabela",
+        "createOrEditLabel": "Kreirajte ili izmenite Tabela",
+        "notFound": "No Tabelas found"
+      },
+      "created": "Kreiran je novi Tabela pod nazivom {{ param }}",
+      "updated": "Tabela pod nazivom {{ param }} je ažuriran",
+      "deleted": "Tabela pod nazivom {{ param }} je obrisan",
+      "delete": {
+        "question": "Da li ste sigurni da želite da obrišete Tabela pod nazivom {{ id }}?"
+      },
+      "detail": {
+        "title": "Tabela"
+      },
+      "id": "ID",
+      "region": "Region",
+      "promet": "Promet"
+    }
+  }
+}

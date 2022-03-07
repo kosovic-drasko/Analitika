@@ -1,0 +1,17 @@
+{
+  "analitikaApp": {
+    "grafikon": {
+      "home": {
+        "title": "Grafikons",
+        "refreshListLabel": "Refresh list",
+        "notFound": "No Grafikons found"
+      },
+      "detail": {
+        "title": "Grafikon"
+      },
+      "id": "ID",
+      "region": "Region",
+      "promet": "Promet"
+    }
+  }
+}

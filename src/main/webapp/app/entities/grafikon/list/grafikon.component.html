@@ -1,0 +1,55 @@
+<div>
+  <h2 id="page-heading" data-cy="GrafikonHeading">
+    <span jhiTranslate="analitikaApp.grafikon.home.title">Grafikons</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="analitikaApp.grafikon.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="grafikons?.length === 0">
+    <span jhiTranslate="analitikaApp.grafikon.home.notFound">No grafikons found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="grafikons && grafikons.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="analitikaApp.grafikon.region">Region</span></th>
+          <th scope="col"><span jhiTranslate="analitikaApp.grafikon.promet">Promet</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let grafikon of grafikons; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/grafikon', grafikon.id, 'view']">{{ grafikon.id }}</a>
+          </td>
+          <td>{{ grafikon.region }}</td>
+          <td>{{ grafikon.promet }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/grafikon', grafikon.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
