@@ -8,7 +8,7 @@ Chart.register(...registerables);
 @Component({
   selector: 'jhi-grafikon',
   templateUrl: './grafikon.component.html',
-  styleUrls: ['./grfikon.component.css'],
+  styleUrls: ['./grfikon.component.scss'],
 })
 export class GrafikonComponent implements OnInit {
   grafikons?: IGrafikon[];
