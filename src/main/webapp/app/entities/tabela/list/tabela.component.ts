@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -19,42 +19,23 @@ import { MatTableDataSource } from '@angular/material/table';
   selector: 'jhi-tabela',
   templateUrl: './tabela.component.html',
 })
-export class TabelaComponent implements OnInit {
+export class TabelaComponent implements OnInit, AfterViewInit {
   tabelas?: ITabela[];
-  isLoading = false;
-  totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
-  page?: number;
-  predicate!: string;
-  ascending!: boolean;
-  ngbPaginationPage = 1;
-
-  public displayedColumns = [
-    'id',
-    'region',
-    'promet',
-    'edit',
-    // 'delete selected',
-    // 'select',
-  ];
-
+  aktivno?: boolean;
+  public displayedColumns = ['id', 'region', 'promet', 'delete', 'edit'];
   public dataSource = new MatTableDataSource<ITabela>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  constructor(
-    protected tabelaService: TabelaService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal,
-    protected dialog: MatDialog
-  ) {}
 
-  ngOnInit(): void {
-    this.loadAll();
+  constructor(protected tabelaService: TabelaService, protected modalService: NgbModal, public dialog: MatDialog) {}
+
+  loadAll(): void {
+    this.tabelaService.query().subscribe((res: HttpResponse<ITabela[]>) => {
+      this.dataSource.data = res.body ?? [];
+    });
   }
-
-  startEdit(id?: number, region?: VTTRegion, promet?: number): any {
+  startEdit(id?: number, region?: string, promet?: number): any {
     const dialogRef = this.dialog.open(TabelaUpdateComponent, {
       data: {
         id,
@@ -62,31 +43,11 @@ export class TabelaComponent implements OnInit {
         promet,
       },
     });
-
-    dialogRef.afterClosed().subscribe(
-      // eslint-disable-next-line no-console
-      () =>
-        this.tabelaService.query().subscribe((res: HttpResponse<ITabela[]>) => {
-          this.dataSource.data = res.body ?? [];
-          // this.ponude = res;
-        })
+    dialogRef.afterClosed().subscribe(() =>
+      this.tabelaService.query().subscribe((res: HttpResponse<ITabela[]>) => {
+        this.dataSource.data = res.body ?? [];
+      })
     );
-  }
-
-  loadAll(): void {
-    this.tabelaService.query().subscribe((res: HttpResponse<ITabela[]>) => {
-      this.dataSource.data = res.body ?? [];
-    });
-  }
-  delete(tabela: ITabela): void {
-    const modalRef = this.modalService.open(TabelaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.tabela = tabela;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        // this.loadPage();
-      }
-    });
   }
   addNew(): any {
     const dialogRef = this.dialog.open(TabelaUpdateComponent, {
@@ -98,46 +59,22 @@ export class TabelaComponent implements OnInit {
       })
     );
   }
-  // protected sort(): string[] {
-  //   const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-  //   if (this.predicate !== 'id') {
-  //     result.push('id');
-  //   }
-  //   return result;
-  // }
-
-  protected handleNavigation(): void {
-    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
-      const page = params.get('page');
-      const pageNumber = +(page ?? 1);
-      const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
-      const predicate = sort[0];
-      const ascending = sort[1] === ASC;
-      if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
-        this.predicate = predicate;
-        this.ascending = ascending;
-        // this.loadPage(pageNumber, true);
+  delete(tabele: ITabela[]): void {
+    const modalRef = this.modalService.open(TabelaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.postupci = tabele;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe((reason: string) => {
+      if (reason === 'deleted') {
+        this.loadAll();
       }
     });
   }
 
-  protected onSuccess(data: ITabela[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
-    this.totalItems = Number(headers.get('X-Total-Count'));
-    this.page = page;
-    if (navigate) {
-      this.router.navigate(['/tabela'], {
-        queryParams: {
-          page: this.page,
-          size: this.itemsPerPage,
-          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
-        },
-      });
-    }
-    this.tabelas = data ?? [];
-    this.ngbPaginationPage = this.page;
+  ngOnInit(): void {
+    this.loadAll();
   }
-
-  protected onError(): void {
-    this.ngbPaginationPage = this.page ?? 1;
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 }

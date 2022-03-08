@@ -34,7 +34,7 @@ management:
             'configprops',
             'env',
             'health',
-            'info',
+
             'jhimetrics',
             'jhiopenapigroups',
             'logfile',

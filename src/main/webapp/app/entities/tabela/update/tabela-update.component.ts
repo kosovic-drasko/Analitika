@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { finalize } from 'rxjs/operators';
 
 import { ITabela, Tabela } from '../tabela.model';
 import { TabelaService } from '../service/tabela.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'jhi-tabela-update',
@@ -15,18 +16,28 @@ import { TabelaService } from '../service/tabela.service';
 export class TabelaUpdateComponent implements OnInit {
   isSaving = false;
 
-  editForm = this.fb.group({
-    id: [],
-    region: [null, [Validators.required]],
-    promet: [null, [Validators.required]],
-  });
-
-  constructor(protected tabelaService: TabelaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected tabelaService: TabelaService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder,
+    private dialogRef: MatDialogRef<TabelaUpdateComponent>,
+    @Inject(MAT_DIALOG_DATA) { id, region, promet }: any
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tabela }) => {
       this.updateForm(tabela);
     });
+  }
+  editForm = this.fb.group({
+    id: [],
+    region: [null, [Validators.required]],
+    promet: [null, [Validators.required]],
+  });
+  public confirmAdd(): void {
+    const tabela = this.createFromForm();
+    this.subscribeToSaveResponse(this.tabelaService.create(tabela));
+    this.dialogRef.close();
   }
 
   previousState(): void {
