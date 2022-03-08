@@ -16,6 +16,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class TabelaUpdateComponent implements OnInit {
   isSaving = false;
 
+  editForm = this.fb.group({
+    id: [],
+    region: [null, [Validators.required]],
+    promet: [null, [Validators.required]],
+  });
   constructor(
     protected tabelaService: TabelaService,
     protected activatedRoute: ActivatedRoute,
@@ -29,11 +34,7 @@ export class TabelaUpdateComponent implements OnInit {
       this.updateForm(tabela);
     });
   }
-  editForm = this.fb.group({
-    id: [],
-    region: [null, [Validators.required]],
-    promet: [null, [Validators.required]],
-  });
+
   public confirmAdd(): void {
     const tabela = this.createFromForm();
     this.subscribeToSaveResponse(this.tabelaService.create(tabela));
