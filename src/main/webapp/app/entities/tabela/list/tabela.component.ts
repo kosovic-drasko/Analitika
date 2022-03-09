@@ -35,6 +35,7 @@ export class TabelaComponent implements OnInit, AfterViewInit {
       this.dataSource.data = res.body ?? [];
     });
   }
+
   startEdit(id?: number, region?: string, promet?: number): any {
     const dialogRef = this.dialog.open(TabelaUpdateComponent, {
       data: {

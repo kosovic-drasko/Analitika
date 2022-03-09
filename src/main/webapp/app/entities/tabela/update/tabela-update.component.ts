@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -15,19 +15,21 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class TabelaUpdateComponent implements OnInit {
   isSaving = false;
+  editForm: FormGroup;
 
-  editForm = this.fb.group({
-    id: [],
-    region: [null, [Validators.required]],
-    promet: [null, [Validators.required]],
-  });
   constructor(
     protected tabelaService: TabelaService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     private dialogRef: MatDialogRef<TabelaUpdateComponent>,
     @Inject(MAT_DIALOG_DATA) { id, region, promet }: any
-  ) {}
+  ) {
+    this.editForm = this.fb.group({
+      id: [id],
+      region: [region],
+      promet: [promet],
+    });
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tabela }) => {
