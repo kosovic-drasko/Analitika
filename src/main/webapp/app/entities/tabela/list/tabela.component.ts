@@ -60,9 +60,9 @@ export class TabelaComponent implements OnInit, AfterViewInit {
       })
     );
   }
-  delete(tabele: ITabela[]): void {
+  delete(postupci: ITabela[]): void {
     const modalRef = this.modalService.open(TabelaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.postupci = tabele;
+    modalRef.componentInstance.tabela = postupci;
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe((reason: string) => {
       if (reason === 'deleted') {
@@ -70,7 +70,6 @@ export class TabelaComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
   ngOnInit(): void {
     this.loadAll();
   }
