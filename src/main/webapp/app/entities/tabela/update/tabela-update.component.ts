@@ -59,14 +59,14 @@ export class TabelaUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITabela>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-      next: () => this.onSaveSuccess(),
+      // next: () => this.onSaveSuccess(),
       error: () => this.onSaveError(),
     });
   }
 
-  protected onSaveSuccess(): void {
-    this.previousState();
-  }
+  // protected onSaveSuccess(): void {
+  //   this.previousState();
+  // }
 
   protected onSaveError(): void {
     // Api for inheritance.

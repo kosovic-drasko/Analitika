@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 @Component({
   selector: 'jhi-tabela',
   templateUrl: './tabela.component.html',
+  styleUrls: ['./tabela.scss'],
 })
 export class TabelaComponent implements OnInit, AfterViewInit {
   tabelas?: ITabela[];
@@ -54,12 +55,9 @@ export class TabelaComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(TabelaUpdateComponent, {
       data: { Postupci: {} },
     });
-    dialogRef.afterClosed().subscribe(() =>
-      this.tabelaService.query().subscribe((res: HttpResponse<ITabela[]>) => {
-        this.dataSource.data = res.body ?? [];
-      })
-    );
+    dialogRef.afterClosed().subscribe(() => this.loadAll());
   }
+
   delete(postupci: ITabela[]): void {
     const modalRef = this.modalService.open(TabelaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.tabela = postupci;
