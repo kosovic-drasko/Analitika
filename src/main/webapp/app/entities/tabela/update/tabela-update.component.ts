@@ -1,13 +1,11 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-
-import { ITabela, Tabela } from '../tabela.model';
 import { TabelaService } from '../service/tabela.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ITabela, Tabela } from '../tabela.model';
 
 @Component({
   selector: 'jhi-tabela-update',
@@ -15,32 +13,19 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class TabelaUpdateComponent implements OnInit {
   isSaving = false;
-  editForm: FormGroup;
 
-  constructor(
-    protected tabelaService: TabelaService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
-    private dialogRef: MatDialogRef<TabelaUpdateComponent>,
-    @Inject(MAT_DIALOG_DATA) { id, region, promet }: any
-  ) {
-    this.editForm = this.fb.group({
-      id: [id],
-      region: [region],
-      promet: [promet],
-    });
-  }
+  editForm = this.fb.group({
+    id: [],
+    region: [],
+    promet: [],
+  });
+
+  constructor(protected tabelaService: TabelaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tabela }) => {
       this.updateForm(tabela);
     });
-  }
-
-  public confirmAdd(): void {
-    const tabela = this.createFromForm();
-    this.subscribeToSaveResponse(this.tabelaService.create(tabela));
-    this.dialogRef.close();
   }
 
   previousState(): void {
@@ -59,14 +44,14 @@ export class TabelaUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITabela>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-      // next: () => this.onSaveSuccess(),
+      next: () => this.onSaveSuccess(),
       error: () => this.onSaveError(),
     });
   }
 
-  // protected onSaveSuccess(): void {
-  //   this.previousState();
-  // }
+  protected onSaveSuccess(): void {
+    this.previousState();
+  }
 
   protected onSaveError(): void {
     // Api for inheritance.

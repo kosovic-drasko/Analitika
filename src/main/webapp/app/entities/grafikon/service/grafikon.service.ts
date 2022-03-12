@@ -6,19 +6,16 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IGrafikon, getGrafikonIdentifier } from '../grafikon.model';
-import { map } from 'rxjs/operators';
 
 export type EntityResponseType = HttpResponse<IGrafikon>;
 export type EntityArrayResponseType = HttpResponse<IGrafikon[]>;
 
 @Injectable({ providedIn: 'root' })
 export class GrafikonService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tabelas');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/grafikons');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
-  grafikon(): any {
-    return this.http.get(this.resourceUrl).pipe(map(result => result));
-  }
+
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IGrafikon>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

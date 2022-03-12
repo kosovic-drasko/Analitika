@@ -1,35 +1,55 @@
-<div class="example">
-  <button mat-raised-button color="primary" (click)="print()">Stampaj</button>
-</div>
+<div>
+  <h2 id="page-heading" data-cy="GrafikonHeading">
+    <span jhiTranslate="analitikaApp.grafikon.home.title">Grafikons</span>
 
-<div class="chartCard">
-  <div class="chartBox">
-    <div *ngIf="chart">
-      <canvas id="canvas">{{ chart }}</canvas>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="analitikaApp.grafikon.home.refreshListLabel">Refresh List</span>
+      </button>
     </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="grafikons?.length === 0">
+    <span jhiTranslate="analitikaApp.grafikon.home.notFound">No grafikons found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="grafikons && grafikons.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="analitikaApp.grafikon.region">Region</span></th>
+          <th scope="col"><span jhiTranslate="analitikaApp.grafikon.promet">Promet</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let grafikon of grafikons; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/grafikon', grafikon.id, 'view']">{{ grafikon.id }}</a>
+          </td>
+          <td>{{ grafikon.region }}</td>
+          <td>{{ grafikon.promet }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/grafikon', grafikon.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-<script type="text/javascript" src="lib.js"></script>
-<script>
-  function printDiv(printableArea) {
-    var printContents = document.getElementById(divName).innerHTML;
-    var originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-
-    window.print();
-
-    document.body.innerHTML = originalContents;
-  }
-</script>
-<script>
-  window.onload = function () {
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    context.fillStyle = 'green';
-    context.fillRect(50, 50, 100, 100);
-    // no argument defaults to image/png; image/jpeg, etc also work on some
-    // implementations -- image/png is the only one that must be supported per spec.
-    window.location = canvas.toDataURL('image/png');
-  };
-</script>

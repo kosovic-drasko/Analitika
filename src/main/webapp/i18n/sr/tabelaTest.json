@@ -1,0 +1,25 @@
+{
+  "analitikaApp": {
+    "tabelaTest": {
+      "home": {
+        "title": "Tabela Tests",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Kreiraj novi Tabela Test",
+        "createOrEditLabel": "Kreirajte ili izmenite Tabela Test",
+        "notFound": "No Tabela Tests found"
+      },
+      "created": "Kreiran je novi Tabela Test pod nazivom {{ param }}",
+      "updated": "Tabela Test pod nazivom {{ param }} je ažuriran",
+      "deleted": "Tabela Test pod nazivom {{ param }} je obrisan",
+      "delete": {
+        "question": "Da li ste sigurni da želite da obrišete Tabela Test pod nazivom {{ id }}?"
+      },
+      "detail": {
+        "title": "Tabela Test"
+      },
+      "id": "ID",
+      "broj": "Broj",
+      "ime": "Ime"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "changelogDate": "20220312061414",
+  "fields": [
+    {
+      "fieldName": "broj",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "ime",
+      "fieldType": "String"
+    }
+  ],
+  "name": "TabelaTest",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

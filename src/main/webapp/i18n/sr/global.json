@@ -9,6 +9,7 @@
         "main": "Entiteti",
         "grafikon": "Grafikon",
         "tabela": "Tabela",
+        "tabelaTest": "Tabela Test",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

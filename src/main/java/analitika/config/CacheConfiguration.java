@@ -50,6 +50,7 @@ public class CacheConfiguration {
             createCache(cm, analitika.domain.User.class.getName() + ".authorities");
             createCache(cm, analitika.domain.Grafikon.class.getName());
             createCache(cm, analitika.domain.Tabela.class.getName());
+            createCache(cm, analitika.domain.TabelaTest.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
